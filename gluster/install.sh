@@ -19,7 +19,21 @@ for node in osd1 osd2 osd3;do
     ssh $node yum makecache
     # step 3 install glusterfs
     ssh $node yum -y install glusterfs-server
+    ssh $node systemctl start glusterd
 done
 
+gluster peer probe osd2
+gluster peer probe osd3
 
+# setup a gluster volume
+for node in osd1 osd2 osd3;do
+	ssh $node mkdir -p /data/brick1/gv0
+done
 
+gluster volume create gv0 stripe 3 osd1:/data/brick1/gv0 osd2:/data/brick1/gv0 osd3:/data/brick1/gv0
+gluster volume start gv0
+
+# You can set the client.event-thread and server.event-thread values for the client and server components. 
+#Setting the value to 3, for example, would enable handling three network connections simultaneously.
+gluster volume set gv0 client.event-threads 3
+gluster volume set gv0 server.event-threads 3
