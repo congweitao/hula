@@ -20,7 +20,6 @@ gluster volume set gv0 performance.client-io-threads on
 gluster volume set gv0 server.outstanding-rpc-limit 128
 gluster volume set gv0 performance.nfs.quick-read on
 gluster volume set gv0 performance.nfs.io-threads on
-gluster volume set gv0 tuned-adm profile throughput-performance
 
 tuned-adm profile throughput-performance
 
